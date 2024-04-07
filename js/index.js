@@ -6,6 +6,12 @@ const dashSeparatedToCamelCase = (dashSeparated) =>
     .toLowerCase()
     .replace(/-(.)/g, (match, group1) => group1.toUpperCase());
 
+const camelCaseToDashSeparated = (value) =>
+  value
+    .split(/(?=[A-Z])/)
+    .join('-')
+    .toLowerCase();
+
 // Constants
 const basePrice = 10;
 const ingredients = {
@@ -115,11 +121,11 @@ function renderButtons() {
         switchBotton(button, state.greenPeppers);
         break;
 
-      case button.classList.contains('btn-sauce'):
+      case button.classList.contains('btn-white-sauce'):
         switchBotton(button, state.whiteSauce);
         break;
 
-      case button.classList.contains('btn-crust'):
+      case button.classList.contains('btn-gluten-free-crust'):
         console.log(button);
         switchBotton(button, state.glutenFreeCrust);
         break;
@@ -146,38 +152,12 @@ function renderPrice() {
 
 renderEverything();
 
-// Iteration 1: Example of a click event listener on `<button class="btn btn-pepperoni">`
-document
-  .querySelector('.btn.btn-pepperoni')
-  .addEventListener('click', function () {
-    state.pepperoni = !state.pepperoni;
-    renderEverything();
-  });
-
-// Iteration 1: Add click event listener on `<button class="btn btn-mushrooms">`
-document
-  .querySelector('.btn.btn-mushrooms')
-  .addEventListener('click', function () {
-    state.mushrooms = !state.mushrooms;
-    renderEverything();
-  });
-
-// Iteration 1: Add click event listener on `<button class="btn btn-green-peppers">`
-document
-  .querySelector('.btn.btn-green-peppers')
-  .addEventListener('click', function () {
-    state.greenPeppers = !state.greenPeppers;
-    renderEverything();
-  });
-
-// Iteration 2: Add click event listener on `<button class="btn btn-sauce">`
-document.querySelector('.btn.btn-sauce').addEventListener('click', function () {
-  state.whiteSauce = !state.whiteSauce;
-  renderEverything();
-});
-
-// Iteration 2: Add click event listener on `<button class="btn btn-crust">`
-document.querySelector('.btn.btn-crust').addEventListener('click', function () {
-  state.glutenFreeCrust = !state.glutenFreeCrust;
-  renderEverything();
+// Iteration 1 & 2: Add click event listener on `<button class="btn btn-...">`
+Object.keys(state).forEach((key) => {
+  document
+    .querySelector(`.btn.btn-${camelCaseToDashSeparated(key)}`)
+    .addEventListener('click', () => {
+      state[key] = !state[key];
+      renderEverything();
+    });
 });
